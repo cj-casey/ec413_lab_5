@@ -20,12 +20,28 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ALU(
-    input [31:0] R2,
-    input [31:0] R3,
+module ALU #(
+    parameter WIDTH = 32
+)(
+    input [WIDTH-1:0] R2,
+    input [WIDTH-1:0] R3,
     input [2:0] ALUOp,
-    output [31:0] R1
-    );
+    output reg [WIDTH-1:0] R0,
+    output reg overflow,
+    output reg zero,
+    output reg carry
+);
     
+    wire [WIDTH-1:0] adder_to_mux;
+    wire [WIDTH-1:0] R1;
+
+    adder my_adder(
+        .a(R2),
+        .b(R3),
+        .c_in(1'b0),
+        .sum(adder_to_mux),
+        .c_out(carry)
+
+    )
     
 endmodule
