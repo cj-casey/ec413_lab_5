@@ -28,18 +28,19 @@ module adder_p #(parameter SIZE = 32) (
     output cout
     );
     wire [SIZE-1:0] c;
+    //c_out, sum, a, b, c_in
     generate 
     genvar i;
-         for(i = 0; i < SIZE;i = i+1) begin : gen_fa
+         for(i = 0; i < SIZE;i = i+1) begin
              if(i == 0) begin
-             FA_str u0(A[i*4+:4],B[i*4+:4],cin,SUM[i*4+:4],c[i]);
+             FA_str u0(.c_out(c[i]), .sum(SUM[i]), .a(A[i]), .b(B[i]), .c_in(cin));
              end
-             else if(i == 7) begin
-             FA_str u1(A[i*4+:4],B[i*4+:4],c[6],SUM[i*4+:4],cout);
+             else if(i == SIZE-1) begin
+             FA_str u1(.c_out(cout), .sum(SUM[i]), .a(A[i]), .b(B[i]), .c_in(c[i-1]));
              end
              else
              begin
-             FA_str u2(A[i*4+:4],B[i*4+:4],c[i-1],SUM[i*4+:4],c[i]);
+             FA_str u2(.c_out(c[i]), .sum(SUM[i]), .a(A[i]), .b(B[i]), .c_in(c[i-1]));
              end
              end
     endgenerate

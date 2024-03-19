@@ -21,10 +21,9 @@
 
 
 module NOT(
-    input A,
-    output C
+    output  Z,
+    input  A
     );
     
-    nand u0(A,A,C);
-    
+    nand u0(Z,A,A);
 endmodule

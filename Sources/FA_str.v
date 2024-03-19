@@ -35,18 +35,18 @@ NOT	   not2		(not_b, b);
 NOT		not3		(not_c, c_in);
 
 // get sum
-AND			and1		(and1_out, a, not_b, not_c);
-AND			and2		(and2_out, not_a, b, not_c);
-AND			and3		(and3_out, not_a, not_b, c_in);
-AND			and4		(and4_out, a, b, c_in);
-OR				or1		(sum, and1_out, and2_out, and3_out, and4_out);
+AND3			and1		(and1_out, a, not_b, not_c);
+AND3			and2		(and2_out, not_a, b, not_c);
+AND3			and3		(and3_out, not_a, not_b, c_in);
+AND3			and4		(and4_out, a, b, c_in);
+OR4				or1		(sum, and1_out, and2_out, and3_out, and4_out);
 
 // get c_out							
-AND			and5		(and5_out, a, b);
-AND			and6		(and6_out, b, c_in);
-AND			and7		(and7_out, a, c_in);
-AND			and8		(and8_out, a, b, c_in);
-OR			or2		(c_out, and5_out, and6_out, and7_out, and8_out);
+AND2			and5		(and5_out, a, b);
+AND2			and6		(and6_out, b, c_in);
+AND2			and7		(and7_out, a, c_in);
+AND3			and8		(and8_out, a, b, c_in);
+OR4			or2		(c_out, and5_out, and6_out, and7_out, and8_out);
 
 
 endmodule

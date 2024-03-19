@@ -20,16 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module AND(
+module AND2 (
+    output Z,
     input A,
-    input B,
-    output C
+    input B
     );
-    
-    
     wire w1;
     
-    nand u0(A,B,w1);
-    nand u1(w1,w1,C);
+    nand u0(w1,A,B);
+    nand u1(Z,w1,w1);
+    
     
 endmodule
