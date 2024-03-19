@@ -25,9 +25,12 @@ module adder_p #(parameter SIZE = 32) (
     input [SIZE-1:0] B,
     input cin,
     output [SIZE-1:0] SUM,
-    output cout
+    output cout,
+    output ZERO_FLAG,
+    output OVERFLOW_FLAG
     );
     wire [SIZE-1:0] c;
+    wire overflow1,overflow2;
     //c_out, sum, a, b, c_in
     generate 
     genvar i;
@@ -44,4 +47,12 @@ module adder_p #(parameter SIZE = 32) (
              end
              end
     endgenerate
+    
+    assign ZERO_FLAG = (SUM == 0) ? 1'b1:1'b0;
+   
+
+    AND3 a0(overflow1,A[SIZE-1],B[SIZE-1],~SUM[SIZE-1]); 
+    AND3 a1(overflow2,~A[SIZE-1],~B[SIZE-1],SUM[SIZE-1]);
+    assign OVERFLOW_FLAG = overflow1 || overflow2;
+    
 endmodule

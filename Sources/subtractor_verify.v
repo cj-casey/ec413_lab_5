@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 03/18/2024 06:45:45 PM
+// Create Date: 03/18/2024 06:54:25 PM
 // Design Name: 
-// Module Name: AND
+// Module Name: adder_verify
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,10 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module NOT(
-    output Z,
-    input  A
+module subtractor_verify #(parameter SIZE = 32) (
+    input [SIZE-1:0] A,
+    input [SIZE-1:0] B,
+    input cin,
+    output [SIZE-1:0] SUM,
+    output cout
     );
     
-    nand u0(Z,A,A);
+   assign {cout,SUM} = A - B + cin;
+    
 endmodule
