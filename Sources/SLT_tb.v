@@ -14,7 +14,7 @@ module SLT_tb;
         .a(a),
         .b(b),
         .clk(clk),
-        .out([0]out)
+        .out(out)
     );
 
 //Initializations
@@ -50,7 +50,5 @@ module SLT_tb;
 
 //Clock Generation
     always #5 clk = ~clk;
-
-
 
 endmodule

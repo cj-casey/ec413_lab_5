@@ -93,7 +93,7 @@ module ALU #(
         .clk(clk)
     );
 
-    slt my_slt #(WIDTH) (
+    SLT my_slt #(WIDTH) (
         .a(R2),
         .b(R3),
         .out(slt_to_mux),

@@ -7,16 +7,16 @@ module SLT #(
     output reg out
 );
     always @(clk) begin
-        if ([WIDTH-1]a == 0 && [WIDTH-1]b == 0) begin
-            out = (a < b)? 1: 0;
-        end else if ([WIDTH-1]a == 1 && [WIDTH-1]b == 1) begin
-            out = (a < b)? 1: 0;
-        end else if ([WIDTH-1]a == 0 && [WIDTH-1]b == 1) begin
-            out = 1;
-        end else if ([WIDTH-1]a == 1 && [WIDTH-1]b == 0) begin
-            out = 0;
+        if (a[WIDTH-1] == 0 && b[WIDTH-1] == 0) begin
+            assign out = (a < b)? 1: 0;
+        end else if (a[WIDTH-1] == 1 && b[WIDTH-1] == 1) begin
+            assign out = (a < b)? 1: 0;
+        end else if (a[WIDTH-1] == 0 && b[WIDTH-1] == 1) begin
+            assign out = 1;
+        end else if (a[WIDTH-1] == 1 && b[WIDTH-1] == 0) begin
+            assign out = 0;
         end else begin
-            out = 0;
+            assign out = 0;
         end
     end
 
