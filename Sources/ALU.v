@@ -27,7 +27,7 @@ module ALU #(
     input [WIDTH-1:0] R3,
     input [2:0] ALUOp,
     input clk,
-    output reg [WIDTH-1:0] R0,
+    output reg [WIDTH-1:0] R1,
     output reg overflow,
     output reg zero,
     output reg carry
@@ -44,8 +44,6 @@ module ALU #(
     wire sub_carry_to_mux;
     wire add_overflow_to_mux;
     wire sub_overflow_to_mux;
-
-    reg [WIDTH-1:0] R1;
 
     not my_not #(WIDTH) (
         .a(R2),
@@ -100,29 +98,48 @@ module ALU #(
         .clk(clk)
     );
 
-    always @(*) begin
+    always @(posedge clk) begin
         case (ALUOp)
-            0: R1 = R2;
-            1: R1 = not_to_mux;
-            2: begin 
+            0: begin 
+                R1 = R2;
+                carry = 0;
+                overflow = 0;
+            end 1: begin 
+                R1 = not_to_mux;
+                carry = 0;
+                overflow = 0;
+            end 2: begin 
                 R1 = add_to_mux;
                 carry = add_carry_to_mux;
                 overflow = add_overflow_to_mux;
-            end
-            3: R1 = nor_to_mux;
-            4: begin 
+            end 3: begin
+                R1 = nor_to_mux;
+                carry = 0;
+                overflow = 0;
+            end 4: begin 
                 R1 = sub_to_mux;
                 carry = sub_carry_to_mux;
                 overflow = sub_overflow_to_mux;
+            end 5: begin
+                R1 = nand_to_mux;
+                carry = 0;
+                overflow = 0;
+            end 6: begin
+                R1 = and_to_mux;
+                carry = 0;
+                overflow = 0;
+            end 7: begin
+                R1 = slt_to_mux;
+                carry = 0;
+                overflow = 0;
+            end default: begin
+                R1 = 0;
+                carry = 0;
+                overflow = 0;
             end
-            5: R1 = nand_to_mux;
-            6: R1 = and_to_mux;
-            7: R1 = slt_to_mux;
-            default: R1 = 0;
         endcase
 
         assign zero = (R1 == 0);
-        assign R0 = R1;
     end
 
 
