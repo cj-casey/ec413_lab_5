@@ -1,3 +1,24 @@
+`timescale 1ns / 1ns
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02/28/2023 09:02:43 AM
+// Design Name: 
+// Module Name: ALU_tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 module top_tb;
 //Inputs
     parameter n = 32;
@@ -7,56 +28,45 @@ module top_tb;
     reg clk;
 
 //Outputs
-    wire [n-1:0] R0;
-    wire overflow;
-    wire zero;
-    wire carry;
+    wire [n-1:0] R1;
     wire error_flag;
     wire [n-1:0] out_verify;
-
-//Wires
-    wire [n-1:0] R1;
-    wire overflow_pipe;
-    wire zero_pipe;
-    wire carry_pipe;
-
+    wire c_out;
+    wire c_out_flag;
+    wire zero;
+    wire zero_flag;
+    wire overflow;
+    wire overflow_flag;
 //Instantiate unit under test
-    ALU #(n)    ALU(
-        .R2(R2),
-        .R3(R3),
-        .ALUOp(ALUOp),
-        .clk(clk),
-        .R1(R0),
-        .overflow(overflow_pipe),
-        .zero(zero_pipe),
-        .carry(carry_pipe)
+ 
+    
+   ALU #(n) ALU(
+    .R2(R2),
+    .R3(R3),
+    .ALUOp(ALUOp),
+    .clk(clk),
+    .R1(R1),
+    .overflow(overflow),
+    .zero(zero),
+    .carry(c_out)
     );
-
-
-    reg_file #(n) reg_file(
-        .R1(R1),
-        .overflow_in(overflow_pipe),
-        .zero_in(zero_pipe),
-        .carry_in(carry_pipe),
-        .clk(clk),
-        .R0(R0),
-        .overflow(overflow),
-        .zero(zero),
-        .carry(carry)
+    
+    reg_file #(n) REG(
+    .R1(R1),
+    .overflow_in(overflow),
+    .zero_in(zero),
+    .carry_in(c_out),
+    .clk(clk),
+    .R0(out_verify),
+    .overflow(overflow_flag),
+    .zero(zero_flag),
+    .carry(c_out_flag)
     );
-
+    
 //Assign error_flag
-    assign error_flag = ((c_out != c_out_verify) || (R0 != out_verify));
+    assign error_flag = (c_out != c_out_flag) || (R1 != out_verify);
 
 //Verification Logic
-    Verification_ALU #(n) Verify(
-    .c_out(c_out_verify), 
-    .out(out_verify), 
-    .a(R2), 
-    .b(R3), 
-    .select(ALUOp), 
-    .clk(clk));
-    
     initial begin
         // Initialize Inputs
 	R2 = 0;

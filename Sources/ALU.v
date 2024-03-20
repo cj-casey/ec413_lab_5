@@ -39,103 +39,103 @@ module ALU #(
     wire [WIDTH-1:0] nand_to_mux;
     wire [WIDTH-1:0] and_to_mux;
     wire [WIDTH-1:0] slt_to_mux;
-
+    wire [WIDTH-1:0] or_to_not;
+    
     wire add_carry_to_mux;
     wire sub_carry_to_mux;
     wire add_overflow_to_mux;
     wire sub_overflow_to_mux;
+    wire sub_zero_to_mux;
+    wire add_zero_to_mux;
 
-    not my_not #(WIDTH) (
-        .a(R2),
-        .out(not_to_mux),
-        .clk(clk)
+    NOT #(WIDTH) my_not(
+        .Z(not_to_mux),
+        .A(R2)
     );
 
-    adder my_add #(WIDTH) (
-        .a(R2),
-        .b(R3),
-        .c_in(1'b0),
-        .sum(add_to_mux),
-        .c_out(add_carry_to_mux),
-        .overflow(add_overflow_to_mux),
-        .clk(clk)
+    adder_p #(WIDTH) my_add(
+        .A(R2),
+        .B(R3),
+        .cin(1'b0),
+        .SUM(add_to_mux),
+        .cout(add_carry_to_mux),
+        .OVERFLOW_FLAG(add_overflow_to_mux),
+        .ZERO_FLAG(add_zero_to_mux)
+    );
+    
+    NOR #(WIDTH) n0(
+        .Z(nor_to_mux),
+        .R2(R2),
+        .R3(R3)
+    );
+    
+    subtractor_p #(WIDTH) my_sub (
+        .A(R2),
+        .B(R3),
+        .SUM(sub_to_mux),
+        .OVERFLOW_FLAG(sub_overflow_to_mux),
+        .cout(sub_carry_to_mux),
+        .ZERO_FLAG(sub_zero_to_mux),
+        .cin(1'b0)
     );
 
-    nor my_nor #(WIDTH) (
-        .a(R2),
-        .b(R3),
-        .out(nor_to_mux),
-        .clk(clk)
+    NAND #(WIDTH) my_nand (
+        .R2(R2),
+        .R3(R3),
+        .Z(nand_to_mux)
     );
 
-    subtractor my_sub #(WIDTH) (
-        .a(R2),
-        .b(R3),
-        .diff(sub_to_mux),
-        .overflow(sub_overflow_to_mux),
-        .c_out(sub_carry_to_mux),
-        .clk(clk)
+    AND_p #(WIDTH) my_and (
+        .A(R2),
+        .B(R3),
+        .Z(and_to_mux)
     );
 
-    nand my_nand #(WIDTH) (
-        .a(R2),
-        .b(R3),
-        .out(nand_to_mux),
-        .clk(clk)
-    );
-
-    and my_and #(WIDTH) (
-        .a(R2),
-        .b(R3),
-        .out(and_to_mux),
-        .clk(clk)
-    );
-
-    SLT my_slt #(WIDTH) (
+    SLT #(WIDTH) my_slt (
         .a(R2),
         .b(R3),
         .out(slt_to_mux),
         .clk(clk)
     );
-
+    
     always @(posedge clk) begin
         case (ALUOp)
-            0: begin 
-                R1 = R2;
-                carry = 0;
-                overflow = 0;
-            end 1: begin 
-                R1 = not_to_mux;
-                carry = 0;
-                overflow = 0;
-            end 2: begin 
-                R1 = add_to_mux;
-                carry = add_carry_to_mux;
-                overflow = add_overflow_to_mux;
-            end 3: begin
-                R1 = nor_to_mux;
-                carry = 0;
-                overflow = 0;
-            end 4: begin 
-                R1 = sub_to_mux;
-                carry = sub_carry_to_mux;
-                overflow = sub_overflow_to_mux;
-            end 5: begin
-                R1 = nand_to_mux;
-                carry = 0;
-                overflow = 0;
-            end 6: begin
-                R1 = and_to_mux;
-                carry = 0;
-                overflow = 0;
-            end 7: begin
-                R1 = slt_to_mux;
-                carry = 0;
-                overflow = 0;
+                3'b000: begin 
+                R1 <= R2;
+                carry <= 0;
+                overflow <= 0;
+            end 3'b001: begin 
+                R1 <= not_to_mux;
+                carry <= 0;
+                overflow <= 0;
+            end 3'b010: begin 
+                R1 <= add_to_mux;
+                carry <= add_carry_to_mux;
+                overflow <= add_overflow_to_mux;
+            end 3'b011: begin
+                R1 <= nor_to_mux;
+                carry <= 0;
+                overflow <= 0;
+            end 3'b100: begin 
+                R1 <= sub_to_mux;
+                carry <= sub_carry_to_mux;
+                overflow <= sub_overflow_to_mux;
+            end 3'b101: begin
+                R1 <= nand_to_mux;
+                carry <= 0;
+                overflow <= 0;
+            end 3'b110: begin
+                R1 <= and_to_mux;
+                carry <= 0;
+                overflow <= 0;
+            end 3'b111: begin
+                R1 <= slt_to_mux;
+                carry <= 0;
+                overflow <= 0;
             end default: begin
-                R1 = 0;
-                carry = 0;
-                overflow = 0;
+                R1 <= 0;
+                carry <= 0;
+                overflow <= 0;
             end
         endcase
 

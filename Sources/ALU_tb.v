@@ -28,26 +28,42 @@ module ALU_tb;
     reg clk;
 
 //Outputs
-    wire [n-1:0] R0;
+    wire [n-1:0] R1;
     wire error_flag;
     wire [n-1:0] out_verify;
     wire c_out;
-
+    wire c_out_verify;
+    wire zero;
+    wire zero_verify;
+    wire overflow;
+    wire overflow_verify;
 //Instantiate unit under test
-    ALU #(n)     ALU(R0, R2, R3, ALUOp, clk);
+ Verification_ALU #(n) ALU_v(
+    R2,
+    R3,
+    ALUOp,
+    clk,
+    out_verify,
+    overflow_verify,
+    zero_verify,
+    c_out_verify
+    );
+    
+   ALU #(n) ALU(
+    .R2(R2),
+    .R3(R3),
+    .ALUOp(ALUOp),
+    .clk(clk),
+    .R1(R1),
+    .overflow(overflow),
+    .zero(zero),
+    .carry(c_out)
+    );
 
 //Assign error_flag
-    assign error_flag = (c_out != c_out_verify || (R0 != out_verify);
+    assign error_flag = (c_out != c_out_verify) || (R1 != out_verify);
 
 //Verification Logic
-    Verification_ALU #(n) Verify(
-    .c_out(c_out_verify), 
-    .out(out_verify), 
-    .a(R2), 
-    .b(R3), 
-    .select(ALUOp), 
-    .clk(clk));
-    
     initial begin
         // Initialize Inputs
 	R2 = 0;

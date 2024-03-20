@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 03/18/2024 06:45:45 PM
+// Create Date: 03/19/2024 07:34:02 PM
 // Design Name: 
-// Module Name: AND
+// Module Name: NOR
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,17 +20,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module NOT #(parameter WIDTH = 1)(
+module NOR #(parameter WIDTH = 32)(
     output [WIDTH-1:0] Z,
-    input  [WIDTH-1:0] A
+    input [WIDTH-1:0] R2,
+    input [WIDTH-1:0] R3
     );
-    
-    
+    wire or_to_not;
     
     generate
     genvar i;
-    for(i = 0; i < WIDTH; i = i+1) begin
-    nand u0(Z[i],A[i],A[i]);
+    for(i = 0; i < WIDTH; i = i + 1)
+    begin
+    OR4 o0(or_to_not,R2,R3,R2,R3);
+    NOT n0(Z[i],or_to_not);
     end
     endgenerate
+    
 endmodule

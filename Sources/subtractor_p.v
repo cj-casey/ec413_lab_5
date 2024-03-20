@@ -30,8 +30,11 @@ module subtractor_p #(parameter SIZE = 32) (
     output OVERFLOW_FLAG
     );
     
-    adder_p #(SIZE) a0(A,~B+1,cin,SUM,cout,ZERO_FLAG,OVERFLOW_FLAG);
+    wire throw_cout_away;
     
+    adder_p #(SIZE) a0(A,~B+1,cin,SUM,throw_cout_away,ZERO_FLAG,OVERFLOW_FLAG);
+    
+    assign cout = 0;
     
 endmodule
 

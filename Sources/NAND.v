@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 03/18/2024 06:45:45 PM
+// Create Date: 03/19/2024 07:54:12 PM
 // Design Name: 
-// Module Name: AND
+// Module Name: NAND
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,17 +20,21 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module NOT #(parameter WIDTH = 1)(
+module NAND #(parameter WIDTH = 32)(
     output [WIDTH-1:0] Z,
-    input  [WIDTH-1:0] A
+    input [WIDTH-1:0] R2,
+    input [WIDTH-1:0] R3
     );
-    
-    
+    wire and_to_not;
     
     generate
     genvar i;
-    for(i = 0; i < WIDTH; i = i+1) begin
-    nand u0(Z[i],A[i],A[i]);
+    for(i = 0; i < WIDTH; i = i + 1)
+    begin
+    AND2 o0(and_to_not,R2,R3);
+    NOT n0(Z[i],and_to_not);
     end
     endgenerate
+    
 endmodule
+
